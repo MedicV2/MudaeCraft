@@ -24,7 +24,7 @@
         rainbow: "https://cdn.discordapp.com/emojis/608192076286263297.webp?size=44&quality=lossless"
     };
 
-    const kakera_src = Object.values(kakera); //The array with all used kakera urls
+    const kakera_src = Object.values(kakera); //The array with all used kakera urls, Will be used in the claim function that hasn't been added yet
     const kakeraClaimSources = [kakera.purple, kakera.orange, kakera.red, kakera.rainbow]; // ONLY ONES THAT YOU WANT TO AUTO CLAIM
 
     //Arrow function to make fancy logs
@@ -32,31 +32,6 @@
         console.log(`%c${str}`, `color: ${color}; font-size: ${size}px; font-weight: bold;`);
     }
 
-    // Function to check for kakera value and click the button if it surpasses a certain amount
-    const checkKakeraValueAndClick = (node) => {
-        const gridElements = node.querySelectorAll('.grid_c7c4e6'); //These are the waifu cards
-        const containerElements = node.querySelectorAll('.container_d09a0b'); // These are the claim buttons
-        const cards = Array.from(gridElements).concat(Array.from(containerElements)); //Waifu cards + claim buttons
-
-        //If any cards+buttons have been found
-        if (cards.length > 0) {
-            const latestCard = cards[cards.length - cards.length / 2 - 1]; // Gets the latest sent card (devided by two since both the cards and buttons are added together)
-            const latestButton = cards[cards.length - 1]; // Gets the button that matches the latest sent card (-1 on both since an array starts counting from 0 whilst array.length starts from 1)
-            const descriptionDiv = latestCard.querySelector('.embedDescription__33443 strong'); //Gets the description from the latest sent card.
-            let numberFound = false;
-
-            if (descriptionDiv && descriptionDiv.tagName.toLowerCase() === 'strong') { //The kakera value is inside <strong></strong> tags, so we get that number if it exists.
-                const number = parseInt(descriptionDiv.textContent, 10);
-                if (!isNaN(number) && number > 50) { //If the kakera value on the card is higher than X, find the corresponding button and if it is found, click it.
-                    numberFound = true;
-                    const button = latestButton.querySelector('button.component__43381');
-                    if (button) {
-                        button.click();
-                    }
-                }
-            }
-        }
-    };
 
     const clickButton = (node) => {
         for (let source of kakeraClaimSources) {
@@ -70,37 +45,93 @@
         }
     };
 
-    const callback = (mutationsList, observer) => {
-        for (let mutation of mutationsList) {
-            if (mutation.type === 'childList') {
-                mutation.addedNodes.forEach(node => {
-                    if (node.nodeType === 1 && node.matches('.component__43381.button_afdfd9.lookFilled__19298.colorPrimary__6ed40.sizeSmall__71a98.grow__4c8a4')) {
-                        clickButton(node); // Kakera claim logic
-                        checkKakeraValueAndClick(node); // Waifu claim logic
-                    }
-                    // Check for nested buttons
-                    if (node.nodeType === 1 && node.querySelectorAll) {
-                        node.querySelectorAll('.component__43381.button_afdfd9.lookFilled__19298.colorPrimary__6ed40.sizeSmall__71a98.grow__4c8a4').forEach(clickButton);
-                    }
-                });
+
+    const claimWaifu = (node, node1) => {
+
+        var latestCard = node
+        var latestButton = node1
+
+        console.log(latestCard)
+        console.log(latestButton)
+        //Select description from latest card.
+        // Check if node is an Element node
+        if (node.nodeType !== 1) {
+            console.error("Provided node is not an element node");
+            return;
+        }
+
+        try {
+            var descriptionDiv = node.querySelector('.embedDescription__33443 strong');
+            console.log("Description div:", descriptionDiv);
+
+            // Additional check to ensure descriptionDiv is found
+            if (!descriptionDiv) {
+                console.error('Description div not found');
+                return;
             }
+
+            var numberFound = false;
+
+            if (descriptionDiv.tagName.toLowerCase() === 'strong') {
+                console.log('GETS HERE')
+                var number = parseInt(descriptionDiv.textContent, 10);
+                console.log(number);
+                if (!isNaN(number) && number > 50) {
+                    numberFound = true;
+                    var button = latestButton.querySelector('button.component__43381');
+                    if (button) {
+                        button.click();
+                    } else {
+                        console.error('Button not found in the latest card');
+                    }
+                }
+            }
+               } catch (error) {
+        console.error("Error in claimWaifu:", error);
+    }
         }
-    };
 
-    const observer = new MutationObserver(callback);
 
-    const startObserving = () => {
-        const targetNode = document.querySelector('.scrollerInner__059a5');
+        //Gets called whenever the HTML updates. (DOM mutation)
+        const callback = (mutationsList, observer) => {
+            // loop that iterates through the mutationsList. The mutationsList parameter contains information about the mutations that occurred in the DOM since the observer was set up.
+            for (let mutation of mutationsList) {
+                //If child nodes (elements) are added or removed from the observed DOM elements.
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach(node => {
+                        // Check for nested buttons
+                        if (node.nodeType === 1 && node.querySelectorAll) {
+                            node.querySelectorAll('.component__43381.button_afdfd9.lookFilled__19298.colorPrimary__6ed40.sizeSmall__71a98.grow__4c8a4').forEach(clickButton);
+                        }
+                        // Check for nested buttons
+                        if (node.nodeType === 1 && node.querySelectorAll) {
+                            const gridNodes = Array.from(node.querySelectorAll('.grid_c7c4e6'));
+                            const containerNodes = Array.from(node.querySelectorAll('.container_d09a0b'));
+                            gridNodes.forEach(gridNode => {
+                                containerNodes.forEach(containerNode => {
+                                    claimWaifu(gridNode, containerNode);
+                                });
+                            });
+                        }
+                    });
+                }
+            }
+        };
 
-        if (targetNode) {
-            const config = { childList: true, subtree: true };
-            observer.observe(targetNode, config);
-            richLog('Observation started on .scrollerInner__059a5', 'lightgreen', 25);
-        } else {
-            richLog('Waiting for .scrollerInner__059a5 to appear...','orange', 25);
-            setTimeout(startObserving, 1000);
-        }
-    };
+        const observer = new MutationObserver(callback);
 
-    startObserving();
-})();
+        const startObserving = () => {
+            const targetNode = document.querySelector('.scrollerInner__059a5');
+
+            if (targetNode) {
+                const config = { childList: true, subtree: true };
+                observer.observe(targetNode, config);
+                richLog('Observation started on .scrollerInner__059a5', 'lightgreen', 25);
+            } else {
+                richLog('Waiting for .scrollerInner__059a5 to appear...','orange', 25);
+                setTimeout(startObserving, 1000);
+            }
+        };
+
+        startObserving();
+    })();
