@@ -33,7 +33,7 @@
     }
 
 
-    const clickButton = (node) => {
+    const kakeraClaim = (node) => {
         for (let source of kakeraClaimSources) {
             const img = node.querySelector(`img[src="${source}"]`);
             if (img) {
@@ -47,91 +47,72 @@
 
 
     const claimWaifu = (node, node1) => {
-
+        //Set laters card and button.
         var latestCard = node
         var latestButton = node1
 
         console.log(latestCard)
         console.log(latestButton)
+
         //Select description from latest card.
-        // Check if node is an Element node
-        if (node.nodeType !== 1) {
-            console.error("Provided node is not an element node");
-            return;
-        }
+        var descriptionDiv = node.querySelector('.embedDescription__33443 strong');
+        var numberFound = false;
 
-        try {
-            var descriptionDiv = node.querySelector('.embedDescription__33443 strong');
-            console.log("Description div:", descriptionDiv);
-
-            // Additional check to ensure descriptionDiv is found
-            if (!descriptionDiv) {
-                console.error('Description div not found');
-                return;
-            }
-
-            var numberFound = false;
-
-            if (descriptionDiv.tagName.toLowerCase() === 'strong') {
-                console.log('GETS HERE')
-                var number = parseInt(descriptionDiv.textContent, 10);
-                console.log(number);
-                if (!isNaN(number) && number > 50) {
-                    numberFound = true;
-                    var button = latestButton.querySelector('button.component__43381');
-                    if (button) {
-                        button.click();
-                    } else {
-                        console.error('Button not found in the latest card');
-                    }
+        //The kakera value is inside <strong></strong> tags, so we get that number if it exists.
+        if (descriptionDiv.tagName.toLowerCase() === 'strong') {
+            var number = parseInt(descriptionDiv.textContent, 10);
+            console.log(number);
+            if (!isNaN(number) && number > 119) {//If the kakera value on the card is higher than X, find the corresponding button and if it is found, click it.
+                numberFound = true;
+                var button = latestButton.querySelector('button.component__43381');
+                if (button) {
+                    button.click();
                 }
             }
-               } catch (error) {
-        console.error("Error in claimWaifu:", error);
+        }
     }
-        }
 
 
-        //Gets called whenever the HTML updates. (DOM mutation)
-        const callback = (mutationsList, observer) => {
-            // loop that iterates through the mutationsList. The mutationsList parameter contains information about the mutations that occurred in the DOM since the observer was set up.
-            for (let mutation of mutationsList) {
-                //If child nodes (elements) are added or removed from the observed DOM elements.
-                if (mutation.type === 'childList') {
-                    mutation.addedNodes.forEach(node => {
-                        // Check for nested buttons
-                        if (node.nodeType === 1 && node.querySelectorAll) {
-                            node.querySelectorAll('.component__43381.button_afdfd9.lookFilled__19298.colorPrimary__6ed40.sizeSmall__71a98.grow__4c8a4').forEach(clickButton);
-                        }
-                        // Check for nested buttons
-                        if (node.nodeType === 1 && node.querySelectorAll) {
-                            const gridNodes = Array.from(node.querySelectorAll('.grid_c7c4e6'));
-                            const containerNodes = Array.from(node.querySelectorAll('.container_d09a0b'));
-                            gridNodes.forEach(gridNode => {
-                                containerNodes.forEach(containerNode => {
-                                    claimWaifu(gridNode, containerNode);
-                                });
+    //Gets called whenever the HTML updates. (DOM mutation)
+    const callback = (mutationsList, observer) => {
+        // loop that iterates through the mutationsList. The mutationsList parameter contains information about the mutations that occurred in the DOM since the observer was set up.
+        for (let mutation of mutationsList) {
+            //If child nodes (elements) are added or removed from the observed DOM elements.
+            if (mutation.type === 'childList') {
+                mutation.addedNodes.forEach(node => {
+                    // kakera claim
+                    if (node.nodeType === 1 && node.querySelectorAll) {
+                        node.querySelectorAll('.component__43381.button_afdfd9.lookFilled__19298.colorPrimary__6ed40.sizeSmall__71a98.grow__4c8a4').forEach(kakeraClaim);
+                    }
+                    // Waifu claim based off kakera value
+                    if (node.nodeType === 1 && node.querySelectorAll) {
+                        const gridNodes = Array.from(node.querySelectorAll('.grid_c7c4e6'));
+                        const containerNodes = Array.from(node.querySelectorAll('.container_d09a0b'));
+                        gridNodes.forEach(gridNode => {
+                            containerNodes.forEach(containerNode => {
+                                claimWaifu(gridNode, containerNode);
                             });
-                        }
-                    });
-                }
+                        });
+                    }
+                });
             }
-        };
+        }
+    };
 
-        const observer = new MutationObserver(callback);
+    const observer = new MutationObserver(callback);
 
-        const startObserving = () => {
-            const targetNode = document.querySelector('.scrollerInner__059a5');
+    const startObserving = () => {
+        const targetNode = document.querySelector('.scrollerInner__059a5');
 
-            if (targetNode) {
-                const config = { childList: true, subtree: true };
-                observer.observe(targetNode, config);
-                richLog('Observation started on .scrollerInner__059a5', 'lightgreen', 25);
-            } else {
-                richLog('Waiting for .scrollerInner__059a5 to appear...','orange', 25);
-                setTimeout(startObserving, 1000);
-            }
-        };
+        if (targetNode) {
+            const config = { childList: true, subtree: true };
+            observer.observe(targetNode, config);
+            richLog('Observation started on .scrollerInner__059a5', 'lightgreen', 25);
+        } else {
+            richLog('Waiting for .scrollerInner__059a5 to appear...','orange', 25);
+            setTimeout(startObserving, 1000);
+        }
+    };
 
-        startObserving();
-    })();
+    startObserving();
+})();
