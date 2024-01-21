@@ -4,7 +4,7 @@
 // @version      2.3
 // @description  Auto-clicks specific kakera buttons.
 // @author       Medc
-// @match        https://discord.com/channels/*
+// @match        https://discord.com/channels/1*
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
