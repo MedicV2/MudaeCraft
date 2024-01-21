@@ -267,7 +267,6 @@ const startBodyObservation = () => {
         settingsIcon.innerHTML = '<path d="M13 6a1 1 0 1 0-2 0v5H6a1 1 0 1 0 0 2h5v5a1 1 0 1 0 2 0v-5h5a1 1 0 1 0 0-2h-5V6Z"></path>';
 
         // Set the innerHTML of the modal
-        // Set the innerHTML of the modal
         modal.innerHTML = `<div style="color: #FFF; text-align: center; margin-bottom: 16px; font-size: 20px; font-weight: bold;">MudaeCraft</div><div style="text-align: center;"><div style="color: #FFF; margin-bottom: 8px;">Auto Kakera Claim:</div><div id="toggleContainer"><label class="switch"><input type="checkbox" id="autoClaimToggle"><span class="slider round"></span></label></div></div><div id="saveButtonContainer"><button id="saveSettingsButton" style="background-color: #5865F2; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Save</button></div>`;
 
 
@@ -365,7 +364,7 @@ const startBodyObservation = () => {
             // Create the settings button
             const settingsButton = document.createElement('button');
             settingsButton.id = 'kakeraSettingsButton';
-            settingsButton.textContent = 'MudaeCraft'; // You can use an icon here if you prefer
+            settingsButton.textContent = 'MudaeCraft'; 
             settingsButton.onclick = () => {
                 toggleSettingsModal();
                 populateSettingsContent();
