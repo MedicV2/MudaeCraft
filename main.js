@@ -122,21 +122,30 @@ GM_addStyle(`/* The switch - the box around the slider */.switch {  position: re
 
 
     const observer = new MutationObserver(callback);
+    let observationTimeout = null; // Initialize the timeout variable
 
     const startObserving = () => {
-        const targetNode = document.querySelector('.scrollerInner__059a5');
+    const targetNode = document.querySelector('.scrollerInner__059a5');
 
-        if (targetNode) {
-            const config = { childList: true, subtree: true };
-            observer.observe(targetNode, config);
-            richLog('Observation started on .scrollerInner__059a5', 'lightgreen', 25);
-        } else {
-            richLog('Waiting for .scrollerInner__059a5 to appear...','orange', 25);
-            setTimeout(startObserving, 1000);
+    if (targetNode) {
+        // If the target node exists, observe it and clear any existing timeout
+        if (observationTimeout) {
+            clearTimeout(observationTimeout);
+            observationTimeout = null;
         }
-    };
-
-    startObserving();
+        const config = { childList: true, subtree: true };
+        observer.observe(targetNode, config);
+        richLog('Observation started on .scrollerInner__059a5', 'lightgreen', 25);
+    } else {
+        // If the target node does not exist and there's no active timeout, set a new timeout
+        if (!observationTimeout) {
+            richLog('Waiting for .scrollerInner__059a5 to appear...', 'orange', 25);
+            observationTimeout = setTimeout(startObserving, 1000);
+        }
+    }
+};
+startObserving();
+    
     // Make sure it is defined from the start
     autoClaimIsActive = GM_getValue('autoClaim', 'OFF') === 'ON';
     /*===============================================================================================================================================================*/
@@ -145,13 +154,17 @@ GM_addStyle(`/* The switch - the box around the slider */.switch {  position: re
             insertSettingsButton();
         }
     }
-    let bodyObserver = null
-    const startBodyObservation = () => {
-        const config = { childList: true, subtree: true };
-        if(!bodyObserver){var bodyObserver = new MutationObserver(bodyObserverCallback);}
-        else {bodyObserver.disconnect()}
-        bodyObserver.observe(document.body, config)
-    };
+    
+let bodyObserver = null;
+const startBodyObservation = () => {
+    const config = { childList: true, subtree: true };
+    if (!bodyObserver) {
+        bodyObserver = new MutationObserver(bodyObserverCallback);
+    } else {
+        bodyObserver.disconnect();
+    }
+    bodyObserver.observe(document.body, config);
+};
 
     const bodyObserverCallback = (mutationsList, observer) => {
         for (let mutation of mutationsList) {
