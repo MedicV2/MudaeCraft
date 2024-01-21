@@ -4,7 +4,7 @@
 // @version      2.3
 // @description  Auto-clicks specific kakera buttons.
 // @author       Medc
-// @match        https://discord.com/channels/1*
+// @match        https://discord.com/channels/*
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
@@ -145,11 +145,12 @@ GM_addStyle(`/* The switch - the box around the slider */.switch {  position: re
             insertSettingsButton();
         }
     }
-
+    let bodyObserver = null
     const startBodyObservation = () => {
         const config = { childList: true, subtree: true };
-        const bodyObserver = new MutationObserver(bodyObserverCallback);
-        bodyObserver.observe(document.body, config);
+        if(!bodyObserver){var bodyObserver = new MutationObserver(bodyObserverCallback);}
+        else {bodyObserver.disconnect()}
+        bodyObserver.observe(document.body, config)
     };
 
     const bodyObserverCallback = (mutationsList, observer) => {
