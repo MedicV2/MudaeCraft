@@ -163,7 +163,6 @@ GM_addStyle(`/* The switch - the box around the slider */.switch {  position: re
         }
     };
 
-    // Implement a function to check for a specific condition
     function specificConditionForReinitialization() {
         // Example condition: check if the settings button is missing
         return !document.getElementById('kakeraSettingsButton');
