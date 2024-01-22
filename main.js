@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         KakeraCraft
+// @name         MudaeCraft
 // @namespace    http://tampermonkey.net/
 // @version      2.3
 // @description  Auto-clicks specific kakera buttons.
@@ -184,6 +184,16 @@ GM_addStyle(`
         /* Changes the '+' to a '-' when the panel is open */
         content: '-'; /* CSS won't affect this, so we'll handle it in JS */
     }
+
+        input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
+        -webkit-appearance: inner-spin-button !important;
+        opacity: 1 !important;
+    }
+
+    input[type='number'] {
+        -moz-appearance: textfield !important;
+    }
 `);
 
 (function() {
@@ -192,6 +202,8 @@ GM_addStyle(`
     // ALL SRC URLS UED ON EACH KAKERA CLAIM BUTTON
     let autoClaimIsActive = false;
     let waifuClaimIsActive = false;
+    let waifuKakeraValueIsActive = false;
+    let waifuValue = ""
 
     const kakera = {
         purple: "https://cdn.discordapp.com/emojis/609264156347990016.webp?size=44&quality=lossless",
@@ -230,7 +242,7 @@ GM_addStyle(`
 
 
     const claimWaifu = (node, node1) => {
-        if (!waifuClaimIsActive) return;
+        if (!waifuKakeraValueIsActive) return;
         // Set laters card and button.
         var latestCard = node
         var latestButton = node1
@@ -246,7 +258,7 @@ GM_addStyle(`
         if (descriptionDiv.tagName.toLowerCase() === 'strong') {
             var number = parseInt(descriptionDiv.textContent, 10);
             console.log(number);
-            if (!isNaN(number) && number > 500) {// If the kakera value on the card is higher than X, find the corresponding button and if it is found, click it.
+            if (!isNaN(number) && number > document.getElementById('waifuKakeraValue').value) {// If the kakera value on the card is higher than X, find the corresponding button and if it is found, click it.
                 numberFound = true;
                 var button = latestButton.querySelector('button.component__43381');
                 if (button) {
@@ -585,26 +597,79 @@ GM_addStyle(`
     }
 
 
-    //Function to create the Waifu Claim Settings Panel
+    // Function to create the Waifu Claim Settings Panel
     function createWaifuClaimSettingsPanel() {
         const panel = document.createElement('div');
         panel.id = 'waifuClaimSettingsPanel';
         panel.style = `display: none; position: absolute; left: 100%; top: 0; width: 300px;
-                       background-color: #2F3136; padding: 10px; border-radius: 8px;
-                       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);`;
+                   background-color: #2F3136; padding: 10px; border-radius: 8px;
+                   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);`;
 
-        panel.innerHTML = `
-            <div style="color: #BBB; display: flex; align-items: center; margin: 5px 0;">
-                <img src="${kakera.blue}" style="width: 20px; height: 20px; margin-right: 10px;">
-                Blue Kakera Value:
-                <input type="number" id="blueKakeraValue" style="margin-left: 10px;" placeholder="Value">
-                <input type="checkbox" id="blueKakeraValueCheckbox" style="margin-left: 10px;">
-            </div>
-            <textarea id="waifuClaimTextarea" style="width: 100%; height: 100px; margin-top: 20px; resize: both;"></textarea>
-        `;
+        // Create the increment and decrement buttons
+        const incrementButton = document.createElement('button');
+        incrementButton.innerText = '▲';
+        incrementButton.style = 'margin-left: 5px;';
+
+        const decrementButton = document.createElement('button');
+        decrementButton.innerText = '▼';
+        decrementButton.style = 'margin-left: 5px;';
+
+        // Function to inc and dec values
+        function incrementValue() {const numberInput = document.getElementById('waifuKakeraValue');numberInput.value = Number(numberInput.value) + 50;}
+        function decrementValue() {const numberInput = document.getElementById('waifuKakeraValue');const newValue = Number(numberInput.value) - 50;
+            numberInput.value = newValue >= 0 ? newValue : 0; // Prevent the value from going below 0
+        }
+
+        // Click event for inc and dec buttons
+        incrementButton.addEventListener('click', incrementValue);
+        decrementButton.addEventListener('click', decrementValue);
+
+        // Hold functionality for inc and dec buttons
+        incrementButton.addEventListener('mousedown', function() {
+            const intervalId = setInterval(incrementValue, 100);
+            // Clear interval on mouse up or leaving the button
+            incrementButton.addEventListener('mouseup', function() { clearInterval(intervalId); });
+            incrementButton.addEventListener('mouseleave', function() { clearInterval(intervalId); });
+        });
+
+        decrementButton.addEventListener('mousedown', function() {
+            const intervalId = setInterval(decrementValue, 100);
+            // Clear interval on mouse up or leaving the button
+            decrementButton.addEventListener('mouseup', function() { clearInterval(intervalId); });
+            decrementButton.addEventListener('mouseleave', function() { clearInterval(intervalId); });
+        });
+
+        // Append the buttons and number input to a div
+        const inputGroup = document.createElement('div');
+        inputGroup.style = 'display: flex; align-items: center;';
+        inputGroup.innerHTML = `
+        <img src="${kakera.blue}" style="width: 20px; height: 20px; margin-right: 10px;">
+        <input type="number" id="waifuKakeraValue" style="margin-left: 10px;" step="50" min="0" placeholder="Value">`;
+
+        // Append the inputGroup to the panel
+        panel.appendChild(inputGroup);
+
+        // Append the increment and decrement buttons to the inputGroup
+        inputGroup.appendChild(decrementButton);
+        inputGroup.appendChild(incrementButton);
+
+        const checkboxLabel = document.createElement('label');
+        checkboxLabel.style = 'display: flex; align-items: center; margin-left: 10px;';
+        checkboxLabel.innerHTML = `
+        <input type="checkbox" id="waifuKakeraValueCheckbox">`;
+
+        // Append the checkbox to the inputGroup
+        inputGroup.appendChild(checkboxLabel);
+
+        const textarea = document.createElement('textarea');
+        textarea.id = 'waifuClaimTextarea';
+        textarea.style = 'width: 100%; height: 100px; margin-top: 20px; resize: both;';
+
+        // Append the textarea to the panel
+        panel.appendChild(textarea);
 
         panel.addEventListener('mousedown', function(e) {
-            e.stopPropagation(); // Stop propagation (Makes them non draggable)
+            e.stopPropagation(); // Stop propagation (Makes them non-draggable)
         });
 
         return panel;
@@ -635,6 +700,13 @@ GM_addStyle(`
 
         toggleAutoClaim();
         toggleWaifuClaim();
+
+        //Save the value and check states of the WaifuClaim Modal
+        waifuValue = document.getElementById('waifuKakeraValue').value;
+        GM_setValue('waifuKakeraValue', waifuValue);
+
+        waifuKakeraValueIsActive = document.getElementById('waifuKakeraValueCheckbox').checked;
+        GM_setValue('waifuKakeraValueCheckbox', waifuKakeraValueIsActive);
 
         // Save the waifu claim toggle state
         waifuClaimIsActive = document.getElementById('waifuClaimToggle').checked;
@@ -675,13 +747,21 @@ GM_addStyle(`
             }
         }
 
+
+        GM_getValue('waifuKakeraValue', waifuValue);
+        GM_getValue('waifuKakeraValueCheckbox', waifuKakeraValueIsActive);
+
+        document.getElementById('waifuKakeraValue').value = waifuValue ;
+        document.getElementById('waifuKakeraValueCheckbox').checked = waifuKakeraValueIsActive;
         // Load the toggle states
         autoClaimIsActive = GM_getValue('autoClaim', 'OFF') === 'ON';
         waifuClaimIsActive = GM_getValue('waifuClaimToggle', 'OFF') === 'ON';
 
+
         // Update the toggle switches
         document.getElementById('autoClaimToggle').checked = autoClaimIsActive;
         document.getElementById('waifuClaimToggle').checked = waifuClaimIsActive;
+
 
 
         // Update kakeraClaimSources based on loaded settings
