@@ -523,6 +523,7 @@ GM_addStyle(`
         saveButton.id = 'saveSettingsButton';
         saveButton.textContent = 'Save';
         saveButton.className = 'save-settings-button';
+        saveButton.addEventListener('click', saveKakeraSettings);
         saveButton.style = 'background-color: #5865F2; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;';
 
         const saveButtonContainer = document.createElement('div');
