@@ -201,8 +201,8 @@ GM_addStyle(`
 
     // ALL SRC URLS UED ON EACH KAKERA CLAIM BUTTON
     let autoClaimIsActive = false;
-    let waifuClaimIsActive = false;
-    let waifuKakeraValueIsActive = false;
+    let waifuClaimIsActive = false; //Slider
+    let waifuKakeraValueIsActive = false; //Checkbox to set claim value
     let waifuValue = ""
 
     const kakera = {
@@ -242,7 +242,7 @@ GM_addStyle(`
 
 
     const claimWaifu = (node, node1) => {
-        if (!waifuKakeraValueIsActive) return;
+        if (!waifuClaimIsActive) return;
         // Set laters card and button.
         var latestCard = node
         var latestButton = node1
@@ -258,7 +258,7 @@ GM_addStyle(`
         if (descriptionDiv.tagName.toLowerCase() === 'strong') {
             var number = parseInt(descriptionDiv.textContent, 10);
             console.log(number);
-            if (!isNaN(number) && number > document.getElementById('waifuKakeraValue').value) {// If the kakera value on the card is higher than X, find the corresponding button and if it is found, click it.
+            if (!isNaN(number) && number > document.getElementById('waifuKakeraValue').value && waifuKakeraValueIsActive) {// If the kakera value on the card is higher than X, find the corresponding button and if it is found, click it.
                 numberFound = true;
                 var button = latestButton.querySelector('button.component__43381');
                 if (button) {
