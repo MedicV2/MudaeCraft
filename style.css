@@ -1,100 +1,76 @@
-/* The switch - the box around the slider */
-.switch {
-	position: relative;
-	display: inline-block;
-	width: 60px;
-	height: 34px;
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-	opacity: 0;
-	width: 0;
-	height: 0;
-}
-
-/* The slider */
-.slider {
-	position: absolute;
-	cursor: pointer;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: #ccc;
-	-webkit-transition: .4s;
-	transition: .4s;
-}
-
-.slider:before {
-	position: absolute;
-	content: "";
-	height: 26px;
-	width: 26px;
-	left: 4px;
-	bottom: 4px;
-	background-color: white;
-	-webkit-transition: .4s;
-	transition: .4s;
-}
-
-input:checked+.slider {
-	background-color: #2196F3;
-}
-
-input:focus+.slider {
-	box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked+.slider:before {
-	-webkit-transform: translateX(26px);
-	-ms-transform: translateX(26px);
-	transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-	border-radius: 34px;
-}
-
-.slider.round:before {
-	border-radius: 50%;
-}
-
-/* Arrow and Detailed Settings Panel Styles */
-#detailedSettingsPanel {
-	display: none;
-	/* Hidden by default */
-	position: absolute;
-	left: 100%;
-	top: 0;
-	width: 300px;
-	background-color: #36393F;
-	/* Discord's dark theme color */
-	padding: 10px;
-	border-radius: 8px;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-	overflow: hidden;
-	z-index: 10001;
-	/* Ensure it's above other elements */
-}
-
-#toggleContainer {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-#saveButtonContainer {
-	text-align: center;
-	margin-top: 20px;
-	/* Adjust the spacing as needed */
-}
-
-.settingsIcon {
-	margin-left: 10px;
-	/* Adjust the spacing as needed */
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+/* Full collapsed CSS for clear readability*/
+  .switch {
+    position: relative; display: inline-block; width: 60px; height: 24px;
+  }
+  .switch input {
+    opacity: 0; width: 0; height: 0;
+  }
+  .slider {
+    position: absolute; cursor: pointer; top: 2px; left: 0; right: 0; bottom: 0;
+    background-color: #ccc; transition: .4s; height: 20px;
+  }
+  .slider:before {
+    position: absolute; content: ""; height: 18px; width: 18px; left: 4px;
+    bottom: 1px; background-color: white; transition: .4s;
+  }
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+  .slider.round {
+    border-radius: 34px;
+  }
+  .slider.round:before {
+    border-radius: 50%;
+  }
+  .settings-label {
+    display: inline-block; width: 140px; color: #FFFFFF; text-align: right;
+    margin-right: 12px;
+  }
+  #detailedSettingsPanel {
+    display: none; position: absolute; left: 100%; top: 0; width: 300px;
+    background-color: #36393F; padding: 10px; border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); z-index: 10001;
+  }
+  #toggleContainer {
+    display: flex; align-items: center; justify-content: center;
+  }
+  #saveButtonContainer {
+    text-align: center; margin-top: 20px;
+  }
+  .settingsIcon {
+    margin-left: 10px; cursor: pointer; display: flex; align-items: center;
+    justify-content: center;
+  }
+  .settings-container {
+    display: flex; flex-direction: column; align-items: flex-start;
+    padding: 10px;
+  }
+  .settings-item {
+    margin-bottom: 10px;
+  }
+  .settings-label {
+    font-weight: bold; margin-bottom: 5px; color: #ccc;
+  }
+  .expander {
+    display: flex; justify-content: flex-end; width: 100%; margin-top: 5px;
+  }
+  .expander-icon {
+    cursor: pointer; fill: #ccc; transition: transform 0.3s ease;
+    font-size: 24px; margin-left: 8px;
+  }
+  .expander-icon.open {
+    transform: rotate(45deg);
+  }
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: inner-spin-button !important; opacity: 1 !important;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield !important;
+  }
