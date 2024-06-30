@@ -45,7 +45,8 @@ MudaeCraft is a Tampermonkey script designed to enhance your Discord experience 
 
 Here’s how the settings modal looks in the Discord interface:
 
-![Settings Modal Example](https://imgur.com/96Dvp9V)
+![]()
+![Settings Modal Example]([http://url/to/img.png](https://imgur.com/96Dvp9V))
 
 ## Script Details
 
