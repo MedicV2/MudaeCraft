@@ -77,4 +77,4 @@ This project is licensed under the MIT License.
 
 ---
 
-Enjoy your enhanced Mudae experience with MudaeCraft! Happy claiming!
+Enjoy your enhanced Mudae experience with MudaeCraft!
