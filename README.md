@@ -4,7 +4,7 @@ MudaeCraft is a Tampermonkey script designed to enhance your Discord experience 
 
 ## Features
 
-- **Auto Kakera Claim**: Automatically click kakera reactions in Discord messages.
+- **Auto Kakera Claim**: Automatically claim kakera reactions. 
 - **Auto Waifu Claim**: Automatically claim characters with a kakera value above a specified threshold.
 - **Customizable Settings**: User-friendly interface to customize which kakera types to claim and the minimum kakera value for waifus.
 
@@ -25,7 +25,8 @@ MudaeCraft is a Tampermonkey script designed to enhance your Discord experience 
 - **Discord Integration**: The script runs automatically on the Discord channels where Mudae bot is active.
 - **Settings Panel**: Click the **MudaeCraft** button in Discord to open the settings panel.
   - **Auto Kakera Reaction**: Toggle auto-claim for kakera types.
-  - **Auto Claim Waifus**: Set the minimum kakera value for auto-claiming waifus.
+  - **Auto Claim Waifus**: Set the minimum kakera value for auto-claiming waifus, and make sure to check the checkbox next to it.
+  - **Auto Claim Waifus by name:** This feature has yet to be implemented.
 
 ### Settings
 
