@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         MudaeCraft
 // @namespace    http://tampermonkey.net/
-// @version      2.3
-// @description  Auto-clicks specific kakera buttons.
+// @version      3.0
+// @description  Mudae Helper, Automatically claim Kakera sources & Automatically claim characters with a kakera > a given value.
 // @author       Medc
 // @match        https://discord.com/channels/*
 // @grant        GM_setValue
