@@ -78,7 +78,7 @@ This project is licensed under the MIT License.
 ---
 
 
-If you want to help work on this tool, please feel free to reach out to me. [here](https://discord.gg/yHrgp95WKZ)
+If you want to help work on this tool, please feel free to reach out to me [here.](https://discord.gg/yHrgp95WKZ)
 
 
 ---
