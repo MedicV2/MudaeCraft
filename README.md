@@ -69,8 +69,7 @@ The script includes custom styles for toggles, buttons, and the settings modal t
 
 ## Support
 
-For questions or support, please open an issue on the GitHub repository, or shoot me a message on Discord.
-If you want to help work on this tool, please feel free to reach out to me [here.](https://discord.gg/yHrgp95WKZ)
+For questions, support, or if you are interested in collaborating on this tool, please open a GitHub issue or message me on Discord [here](https://discord.gg/yHrgp95WKZ).
 
 ## License
 
