@@ -69,8 +69,9 @@ GM_addStyle(`.switch {position: relative;display: inline-block;width: 60px;heigh
         if (!waifuClaimIsActive) return; // Exit if waifu-claim is not active
 
         // Find the description div and parse the kakera value
-        const descriptionDiv = node.querySelector('.embedDescription_ad0b71 strong');
+        const descriptionDiv = node.querySelector('.embedDescription_b0068a.embedMargin_b0068a strong');
         if (descriptionDiv && descriptionDiv.tagName.toLowerCase() === 'strong') {
+            console.log('Description found');
             const number = parseInt(descriptionDiv.textContent, 10); // Parse the kakera value
             if (!isNaN(number) && number > document.getElementById('waifuKakeraValue').value && waifuKakeraValueIsActive) {
                 // Check if the kakera value is higher than the set threshold
@@ -96,10 +97,11 @@ GM_addStyle(`.switch {position: relative;display: inline-block;width: 60px;heigh
                         node.querySelectorAll('.button_dd4f85.lookFilled_dd4f85.colorPrimary_dd4f85.sizeSmall_dd4f85.grow_dd4f85').forEach(kakeraClaim);
 
                         // Find and iterate over grid and container nodes to claim waifus
-                        const gridNodes = node.querySelectorAll('.grid_ad0b71');
+                        const gridNodes = node.querySelectorAll('.grid_b0068a');
                         const containerNodes = node.querySelectorAll('.container_e426aa');
                         gridNodes.forEach(gridNode => {
                             containerNodes.forEach(containerNode => {
+                                console.log('TRYING TO CLAIM CHARACTER');
                                 claimWaifu(gridNode, containerNode);
                             });
                         });
