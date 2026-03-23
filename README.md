@@ -1,12 +1,13 @@
-# MudaeCraft
-
-MudaeCraft is a Tampermonkey script designed to enhance your Discord experience with the Mudae bot. It automatically claims kakera sources and characters based on customizable thresholds.
+# MedBot
+# WIP, 2026 VERSION COMING SOON!
 
 ## Features
 
-- **Auto Kakera Claim**: Automatically claim kakera reactions. 
-- **Auto Waifu Claim**: Automatically claim characters with a kakera value above a specified threshold.
-- **Customizable Settings**: User-friendly interface to customize which kakera types to claim and the minimum kakera value for waifus.
+- **Auto Kakera Claim**: Automatically claim kakera reactions.
+- **Auto Claim wishes**: Automatically claims wished characters.
+- **Auto Waifu Claim**: Automatically claim characters with a kakera value between a specified threshold.
+- **Customizable Settings**: User-friendly interface to customize and navigate the features.
+- **Auto minigames**: Auto complete for $oh, $oc, $oq and $ot using optimised algorithms for each gamemode! 99% success rate.
 
 ## Installation
 
@@ -20,56 +21,6 @@ MudaeCraft is a Tampermonkey script designed to enhance your Discord experience 
    - Copy the entire MudaeCraft script into the editor.
    - Save the script.
 
-## Usage
-
-- **Discord Integration**: The script runs automatically on the Discord channels where Mudae bot is active.
-- **Settings Panel**: Click the **MudaeCraft** button in Discord to open the settings panel.
-  - **Auto Kakera Reaction**: Toggle auto-claim for kakera types.
-  - **Auto Claim Waifus**: Set the minimum kakera value for auto-claiming waifus, and make sure to check the checkbox next to it.
-  - **Auto Claim Waifus by name:** This feature has yet to be implemented.
-
-### Settings
-
-1. **Auto Kakera Reaction**: Enable or disable automatic claiming of specific kakera types (e.g., purple, orange, red).
-2. **Auto Claim Waifus**:
-   - Set the minimum kakera value.
-   - Toggle the feature on or off.
-
-### UI Components
-
-- **Settings Button**: Located in the Discord UI, opens the MudaeCraft settings.
-- **Draggable Modal**: Contains options to customize the script's behavior.
-- **Increment/Decrement Buttons**: Adjust the kakera value threshold for waifu claims.
-
-### Example
-
-Here’s how the settings modal looks in the Discord interface:
-
-![Settings Modal Example](https://i.imgur.com/96Dvp9V.png)
-
-## Script Details
-
-```javascript
-// ==UserScript==
-// @name         MudaeCraft
-// @namespace    http://tampermonkey.net/
-// @version      3.0
-// @description  Mudae Helper, Automatically claim Kakera sources & Automatically claim characters with a kakera > a given value.
-// @author       Medc
-// @match        https://discord.com/channels/*
-// @grant        GM_setValue
-// @grant        GM_getValue
-// @grant        GM_addStyle
-// ==/UserScript==
-```
-
-## CSS
-
-The script includes custom styles for toggles, buttons, and the settings modal to blend seamlessly with Discord's interface.
-
-## Support
-
-For questions, support, or if you are interested in collaborating on this tool, please open a GitHub issue or message me on Discord [here](https://discord.gg/yHrgp95WKZ).
 
 ## License
 
