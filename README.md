@@ -101,5 +101,6 @@ The panel has five tabs:
 ## License
 
 MIT. Do whatever you want with it, but keep the copyright notice intact.
-
+<meta name="google-site-verification" content="Z0y1v2MykduOE2opOu2rVqb_qDbP1jXYk3S0dx02EUs" />
 Copyright (c) 2026 [MedicV2](https://github.com/MedicV2)
+
