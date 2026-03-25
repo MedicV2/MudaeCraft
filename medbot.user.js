@@ -9,6 +9,8 @@
 // @grant        GM_xmlhttpRequest
 // @grant        GM_getResourceText
 // @resource     medbot-css https://raw.githubusercontent.com/MedicV2/MedBot/refs/heads/main/medbot.css
+// @connect      media2.giphy.com
+// @connect      cdn.discordapp.com
 // ==/UserScript==
 
 (function () {
