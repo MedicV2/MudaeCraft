@@ -8,6 +8,8 @@
 // @grant        GM_setValue
 // @grant        GM_xmlhttpRequest
 // @grant        GM_getResourceText
+// @updateURL    https://raw.githubusercontent.com/MedicV2/MudaeCraft/refs/heads/main/medbot.user.js
+// @downloadURL  https://raw.githubusercontent.com/MedicV2/MudaeCraft/refs/heads/main/medbot.user.js
 // @resource     medbot-css https://raw.githubusercontent.com/MedicV2/MedBot/refs/heads/main/medbot.css
 // @connect      media2.giphy.com
 // @connect      cdn.discordapp.com
