@@ -2,7 +2,7 @@
 
 <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExZWc4aWpiM3E0NWt0ZGFjbG04aWhvbTE1YzJuMjhucXN3ODhzeXM5dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/bXufANMxyrNihW1iTv/giphy.gif" width="80px">
 
-# MedBot
+# MedBot: Mudae automation inside the browser.
 
 **Mudae automation for Discord. Auto roll, kakera, claims and minigames.**
 
