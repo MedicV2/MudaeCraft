@@ -8,7 +8,7 @@
 // @grant        GM_setValue
 // @grant        GM_xmlhttpRequest
 // @grant        GM_getResourceText
-// @resource     medbot-css https://raw.githubusercontent.com/MedicV2/MudaeCraft/refs/heads/main/medbot.css
+// @resource     medbot-css https://raw.githubusercontent.com/MedicV2/MedBot/refs/heads/main/medbot.css
 // ==/UserScript==
 
 (function () {
