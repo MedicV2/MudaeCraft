@@ -1,0 +1,339 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&display=swap');
+
+@property --mb-border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* -- Backdrop ----------------------------------------- */
+.medbot-backdrop {
+  position:fixed;inset:0;z-index:999999;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(12px) saturate(1.2);
+  -webkit-backdrop-filter:blur(12px) saturate(1.2);
+  animation:mb-fade .2s ease;
+}
+@keyframes mb-fade { from{opacity:0} to{opacity:1} }
+
+/* -- Modal -------------------------------------------- */
+.medbot-modal {
+  position:relative;width:480px;max-width:calc(100vw - 24px);
+  background:#0c0d14;
+  border:1px solid transparent;
+  border-radius:22px;
+  box-shadow:0 0 0 1px rgba(139,92,246,.08), 0 8px 32px rgba(0,0,0,.5), 0 48px 96px rgba(0,0,0,.4), 0 0 80px -20px rgba(99,102,241,.15);
+  padding:32px 30px 26px;
+  font-family:'Syne',system-ui,sans-serif;
+  color:#e2e8f0;
+  overflow:visible;
+  background-image: linear-gradient(#0c0d14, #0c0d14), conic-gradient(from var(--mb-border-angle), #7c3aed44, #6366f166, #2dd4bf44, #8b5cf644, #7c3aed44);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  animation: mb-up .24s cubic-bezier(.22,1,.36,1), mb-border-spin 6s linear infinite;
+}
+@keyframes mb-up { from{opacity:0;transform:translateY(14px) scale(.98)} to{opacity:1;transform:translateY(0) scale(1)} }
+@keyframes mb-border-spin { to { --mb-border-angle: 360deg; } }
+
+.medbot-modal::before {
+  content:'';position:absolute;top:0;left:24px;right:24px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(139,92,246,.6) 30%,rgba(99,102,241,.6) 50%,rgba(45,212,191,.5) 70%,transparent);
+}
+
+/* -- GIF ---------------------------------------------- */
+.medbot-gif-wrap { position:absolute;top:-125px;left:50%;transform:translateX(-50%);width:125px;height:125px;pointer-events:none;z-index:2; }
+.medbot-gif { width:100%;height:100%;object-fit:contain;user-select:none;-webkit-user-drag:none;filter:drop-shadow(0 8px 28px rgba(139,92,246,.4)) drop-shadow(0 2px 8px rgba(99,102,241,.3)); }
+
+/* -- Header ------------------------------------------- */
+.medbot-header { display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px; }
+.medbot-title {
+  font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;
+  background:linear-gradient(135deg,#f8fafc 20%,#c4b5fd 60%,#818cf8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.medbot-user-pill {
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.18);
+  border-radius:999px;padding:3px 12px 3px 8px;
+  font-family:'DM Mono',monospace;font-size:11.5px;color:#c4b5fd;
+}
+.medbot-user-pill-dot { width:6px;height:6px;border-radius:50%;background:#6ee7b7;box-shadow:0 0 8px #6ee7b7;flex-shrink:0; }
+
+/* -- Status Badge ------------------------------------- */
+.medbot-status-badge {
+  display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
+  font-family:'DM Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;
+}
+.medbot-status-badge.idle { background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#94a3b8; }
+.medbot-status-badge.running { background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.22);color:#34d399;box-shadow:0 0 20px -4px rgba(52,211,153,.2); }
+.medbot-status-dot { width:6px;height:6px;border-radius:50%;background:currentColor; }
+.medbot-status-badge.running .medbot-status-dot { animation:mb-pulse 1.4s ease-in-out infinite; }
+@keyframes mb-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.65)} }
+
+/* -- Divider ------------------------------------------ */
+.medbot-divider { height:1px;background:rgba(255,255,255,.05);margin-bottom:22px; }
+
+/* -- Tabs --------------------------------------------- */
+.medbot-tabs {
+  position:relative;display:flex;gap:2px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:14px;padding:3px;margin-bottom:22px;
+}
+.medbot-tab-indicator {
+  position:absolute;top:3px;bottom:3px;
+  border-radius:11px;
+  background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(99,102,241,.14));
+  border:1px solid rgba(139,92,246,.18);
+  box-shadow:0 0 12px -2px rgba(139,92,246,.15);
+  transition:left .32s cubic-bezier(.22,1,.36,1), width .32s cubic-bezier(.22,1,.36,1);
+  z-index:0;pointer-events:none;
+}
+.medbot-tab {
+  position:relative;z-index:1;flex:1;border:none;background:transparent;
+  color:#64748b;padding:8px 0;cursor:pointer;
+  font-family:'Syne',sans-serif;font-size:11.5px;font-weight:700;
+  letter-spacing:.04em;text-transform:uppercase;
+  transition:color .2s;border-radius:11px;
+}
+.medbot-tab:hover:not(.active) { color:#94a3b8; }
+.medbot-tab.active { color:#c4b5fd; }
+
+/* -- Panels ------------------------------------------- */
+.medbot-panel { display:none; }
+.medbot-panel.active { display:block;animation:mb-panel-in .2s ease; }
+@keyframes mb-panel-in { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+/* -- Fields ------------------------------------------- */
+.medbot-field { margin-bottom:16px; }
+.medbot-field-label {
+  display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:#94a3b8;margin-bottom:7px;font-family:'DM Mono',monospace;
+}
+.medbot-input {
+  width:100%;box-sizing:border-box;padding:11px 14px;
+  border-radius:12px;border:1px solid rgba(255,255,255,.07);
+  outline:none;background:rgba(255,255,255,.03);
+  color:#f1f5f9;font-size:14px;font-family:'DM Mono',monospace;
+  transition:border-color .2s,box-shadow .2s,background .2s;
+}
+.medbot-select {
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2394a3b8' d='M1.4 0L6 4.6 10.6 0 12 1.4l-6 6-6-6z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;
+  padding-right:36px;cursor:pointer;
+}
+.medbot-select option { background:#0c0d14;color:#f1f5f9; }
+.medbot-input::placeholder { color:#475569; }
+.medbot-input:focus { border-color:rgba(139,92,246,.4);box-shadow:0 0 0 3px rgba(139,92,246,.1);background:rgba(139,92,246,.04); }
+.medbot-input:disabled { opacity:.35;cursor:not-allowed; }
+
+/* -- Toggle rows -------------------------------------- */
+.medbot-toggle-row {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:14px;cursor:pointer;user-select:none;
+  transition:background .15s,border-color .15s;margin-bottom:14px;
+}
+.medbot-toggle-row:hover { background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.08); }
+.medbot-toggle-label { font-size:13.5px;font-weight:600;color:#e2e8f0; }
+.medbot-toggle-sub { font-size:12px;color:#94a3b8;font-family:'DM Mono',monospace;margin-top:3px; }
+
+/* -- Switch ------------------------------------------- */
+.medbot-switch { position:relative;width:38px;height:22px;flex-shrink:0; }
+.medbot-switch input { opacity:0;width:0;height:0;position:absolute; }
+.medbot-switch-track {
+  position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:999px;
+  transition:background .25s,border-color .25s,box-shadow .25s;
+  border:1px solid rgba(255,255,255,.08);
+}
+.medbot-switch input:checked ~ .medbot-switch-track {
+  background:linear-gradient(135deg,rgba(99,102,241,.5),rgba(139,92,246,.5));
+  border-color:rgba(139,92,246,.5);
+  box-shadow:0 0 12px -2px rgba(139,92,246,.35);
+}
+.medbot-switch-thumb {
+  position:absolute;top:3px;left:3px;width:16px;height:16px;
+  background:#fff;border-radius:50%;
+  transition:transform .25s cubic-bezier(.22,1,.36,1);
+  box-shadow:0 1px 4px rgba(0,0,0,.4);
+}
+.medbot-switch input:checked ~ .medbot-switch-thumb { transform:translateX(16px); }
+
+/* -- Kakera list -------------------------------------- */
+.medbot-kakera-scroll { max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;padding-right:4px;margin-top:4px; }
+.medbot-kakera-scroll::-webkit-scrollbar { width:3px; }
+.medbot-kakera-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12);border-radius:99px; }
+.medbot-kakera-row {
+  display:flex;align-items:center;gap:10px;
+  padding:9px 14px;
+  background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);
+  border-radius:10px;cursor:pointer;user-select:none;
+  transition:background .15s,border-color .15s,box-shadow .15s;
+}
+.medbot-kakera-row:hover { background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08); }
+.medbot-kakera-row.selected { background:rgba(139,92,246,.07);border-color:rgba(139,92,246,.22);box-shadow:0 0 12px -4px rgba(139,92,246,.15); }
+.medbot-kakera-row input { display:none; }
+.medbot-kakera-row img { width:22px;height:22px;object-fit:contain; }
+.medbot-kakera-name { flex:1;font-size:13px;font-weight:600;color:#94a3b8; }
+.medbot-kakera-row.selected .medbot-kakera-name { color:#c4b5fd; }
+.medbot-kakera-check {
+  width:18px;height:18px;border-radius:5px;
+  border:1px solid rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:background .15s,border-color .15s;
+}
+.medbot-kakera-row.selected .medbot-kakera-check { background:linear-gradient(135deg,#6366f1,#8b5cf6);border-color:transparent; }
+.medbot-kakera-check svg { display:none; }
+.medbot-kakera-row.selected .medbot-kakera-check svg { display:block; }
+
+/* -- Note boxes --------------------------------------- */
+.medbot-mini-note {
+  margin-top:14px;font-size:12px;color:#94a3b8;line-height:1.6;
+  font-family:'DM Mono',monospace;padding:12px 14px;
+  background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);
+  border-radius:10px;
+}
+
+/* -- Actions bar -------------------------------------- */
+.medbot-actions { display:flex;gap:8px;margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.05); }
+.medbot-actions-left { margin-right:auto; }
+
+/* -- Buttons ------------------------------------------ */
+.medbot-btn {
+  border:none;border-radius:12px;padding:10px 20px;
+  font-size:12px;font-weight:700;font-family:'Syne',sans-serif;
+  letter-spacing:.04em;text-transform:uppercase;cursor:pointer;
+  transition:all .15s ease;
+}
+.medbot-btn:active { transform:scale(.96); }
+.medbot-btn-ghost { background:transparent;color:#64748b;border:1px solid rgba(255,255,255,.07); }
+.medbot-btn-ghost:hover { background:rgba(255,255,255,.04);color:#94a3b8;border-color:rgba(255,255,255,.12); }
+.medbot-btn-secondary { background:rgba(255,255,255,.05);color:#94a3b8;border:1px solid rgba(255,255,255,.08); }
+.medbot-btn-secondary:hover { background:rgba(255,255,255,.08);color:#cbd5e1; }
+.medbot-btn-primary {
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;
+  box-shadow:0 4px 20px rgba(99,102,241,.3),0 0 0 1px rgba(139,92,246,.15);
+}
+.medbot-btn-primary:hover { box-shadow:0 4px 28px rgba(99,102,241,.45),0 0 0 1px rgba(139,92,246,.25);opacity:.93; }
+.medbot-btn-danger { background:rgba(251,113,133,.08);color:#fb7185;border:1px solid rgba(251,113,133,.2); }
+.medbot-btn-danger:hover { background:rgba(251,113,133,.15);box-shadow:0 0 16px -4px rgba(251,113,133,.2); }
+
+/* -- Menu -------------------------------------------- */
+.medbot-menu-badge {
+  margin-left:auto;font-size:10px;padding:2px 8px;border-radius:999px;
+  background:rgba(139,92,246,.12);color:#c4b5fd;font-weight:700;
+  font-family:'DM Mono',monospace;letter-spacing:.04em;border:1px solid rgba(139,92,246,.2);
+}
+[data-medbot-injected]::before {
+  content:'';position:absolute;top:0;left:6px;right:6px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(139,92,246,.5) 30%,rgba(99,102,241,.5) 70%,transparent);
+  pointer-events:none;
+}
+.medbot-menu-status {
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  font-family:'DM Mono',monospace;padding:2px 8px 2px 7px;border-radius:999px;
+  background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.22);color:#c4b5fd;
+  flex-shrink:0;margin-left:auto;
+}
+.medbot-menu-status.running { background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.25);color:#34d399; }
+.medbot-menu-status-dot { width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;animation:mb-pulse 1.4s ease-in-out infinite; }
+
+/* -- Multiplier controls ------------------------------ */
+.medbot-multiplier-control { display:flex;align-items:center;gap:4px; }
+.medbot-mult-btn {
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#94a3b8;
+  width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;padding:0;line-height:1;font-family:'Syne',sans-serif;
+}
+.medbot-mult-btn:hover:not(:disabled) { background:rgba(139,92,246,.12);color:#c4b5fd;border-color:rgba(139,92,246,.25); }
+.medbot-mult-btn:disabled { opacity:.3;cursor:not-allowed; }
+.medbot-mult-display { font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:#e2e8f0;min-width:30px;text-align:center; }
+
+/* -- Or divider --------------------------------------- */
+.medbot-or-divider {
+  display:flex;align-items:center;gap:10px;margin:12px 0;
+  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;color:#64748b;text-transform:uppercase;
+}
+.medbot-or-divider::before,.medbot-or-divider::after { content:'';flex:1;height:1px;background:rgba(255,255,255,.06); }
+
+/* -- Claim section ------------------------------------ */
+.medbot-claim-section {
+  background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);
+  border-radius:14px;padding:14px 16px;
+}
+.medbot-claim-section-label {
+  font-family:'DM Mono',monospace;font-size:11px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;
+  margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+.medbot-claim-note { font-family:'DM Mono',monospace;font-size:12px;color:#64748b;margin-top:16px;text-align:center;line-height:1.5; }
+
+/* -- $tu Status ---------------------------------------- */
+.medbot-tu-status { display:flex;flex-direction:column;gap:6px;margin-bottom:14px; }
+.medbot-tu-badge {
+  display:inline-flex;padding:3px 10px;border-radius:999px;
+  font-family:'DM Mono',monospace;font-size:11px;font-weight:600;
+}
+.medbot-tu-badge.available { background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.22);color:#34d399;box-shadow:0 0 10px -3px rgba(52,211,153,.2); }
+.medbot-tu-badge.unavailable { background:rgba(251,113,133,.06);border:1px solid rgba(251,113,133,.18);color:#fb7185; }
+.medbot-tu-updated { font-family:'DM Mono',monospace;font-size:11px;color:#64748b;text-align:right;padding:2px 2px 0; }
+.medbot-tu-empty {
+  font-family:'DM Mono',monospace;font-size:12.5px;color:#94a3b8;text-align:center;padding:24px;
+  background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:14px;
+}
+
+/* -- $tu Grid ------------------------------------------ */
+.medbot-tu-grid { display:grid;gap:8px;margin-bottom:10px; }
+.medbot-tu-grid.cols-2 { grid-template-columns:repeat(2,1fr); }
+.medbot-tu-grid.cols-3 { grid-template-columns:repeat(3,1fr); }
+.medbot-tu-card {
+  background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);
+  border-radius:14px;padding:16px 12px 14px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;
+  transition:border-color .2s,box-shadow .2s;
+}
+.medbot-tu-card:hover { border-color:rgba(255,255,255,.08);box-shadow:0 0 16px -4px rgba(139,92,246,.1); }
+.medbot-tu-card-label {
+  font-family:'DM Mono',monospace;font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;
+}
+.medbot-tu-card-main { display:flex;align-items:center;justify-content:center; }
+.medbot-tu-card-sub { font-family:'DM Mono',monospace;font-size:11px;color:#94a3b8;line-height:1.4;min-height:14px; }
+.medbot-tu-rolls-num { font-family:'DM Mono',monospace;font-size:24px;font-weight:700;color:#c4b5fd;line-height:1; }
+.medbot-tu-progress {
+  width:100%;height:3px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;
+}
+.medbot-tu-progress-fill {
+  height:100%;border-radius:99px;
+  background:linear-gradient(90deg,#6366f1,#a78bfa);
+  transition:width .5s ease;
+}
+
+/* -- Channel lock ------------------------------------- */
+.medbot-channel-rows { position:relative;margin-bottom:14px; }
+.medbot-channel-tooltip {
+  position:absolute;bottom:calc(100% + 10px);left:50%;
+  transform:translateX(-50%) translateY(5px);width:240px;
+  background:#12131f;border:1px solid rgba(139,92,246,.25);
+  border-radius:14px;padding:12px 16px;
+  font-family:'DM Mono',monospace;font-size:12px;line-height:1.6;color:#94a3b8;
+  opacity:0;pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;
+  z-index:100;box-shadow:0 16px 40px rgba(0,0,0,.6);
+}
+.medbot-channel-rows:hover .medbot-channel-tooltip { opacity:1;transform:translateX(-50%) translateY(0); }
+.medbot-channel-tooltip::after { content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#12131f; }
+.medbot-lock-row { margin-bottom:0;cursor:pointer; }
+.medbot-channel-breadcrumb-wrap {
+  flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+  font-size:13px;font-weight:600;
+}
+.medbot-channel-server { color:#c4b5fd; }
+.medbot-channel-sep { color:#475569;font-weight:400; }
+.medbot-channel-name { color:#e2e8f0; }
