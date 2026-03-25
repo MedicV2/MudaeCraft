@@ -2,9 +2,9 @@
 
 <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExZWc4aWpiM3E0NWt0ZGFjbG04aWhvbTE1YzJuMjhucXN3ODhzeXM5dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/bXufANMxyrNihW1iTv/giphy.gif" width="80px">
 
-# MedBot: Mudae automation inside the browser.
+# MedBot for Mudae.
 
-**Mudae automation for Discord. Auto roll, kakera, claims and minigames.**
+**Mudae automation for Discord, inside the browser! Auto roll, kakera, claims and minigames.**
 
 [![Version](https://img.shields.io/badge/version-3.0-5865f2?style=flat-square)](https://github.com/MedicV2/MedBot)
 [![Platform](https://img.shields.io/badge/platform-Tampermonkey-orange?style=flat-square)](https://www.tampermonkey.net/)
