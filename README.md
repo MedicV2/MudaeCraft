@@ -4,7 +4,7 @@
 
 # MedBot for Mudae.
 
-**Mudae automation for Discord, inside the browser! Auto roll, kakera, claims and minigames.**
+**Mudae automation for Discord, inside the browser. Auto roll, kakera, claims and minigames.**
 
 [![Version](https://img.shields.io/badge/version-3.0-5865f2?style=flat-square)](https://github.com/MedicV2/MedBot)
 [![Platform](https://img.shields.io/badge/platform-Tampermonkey-orange?style=flat-square)](https://www.tampermonkey.net/)
