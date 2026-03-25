@@ -1,5 +1,6 @@
 // ==UserScript==
 // @name         MedBot
+// @author       @medc
 // @version      3.0
 // @description  Currently WIP, tool that automates the discord bot Mudae.
 // @match        *://discord.com/*
