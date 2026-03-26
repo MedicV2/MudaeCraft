@@ -10,7 +10,7 @@
 [![Platform](https://img.shields.io/badge/platform-Tampermonkey-orange?style=flat-square)](https://www.tampermonkey.net/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 
-[![Install](https://img.shields.io/badge/Install%20Script-Click%20Here-5865f2?style=for-the-badge&logo=tampermonkey)](https://raw.githubusercontent.com/MedicV2/MedBot/main/medbot.user.js)
+[![Install](https://img.shields.io/badge/Install%20Script-Click%20Here-5865f2?style=for-the-badge&logo=tampermonkey)](https://raw.githubusercontent.com/MedicV2/MedBot-Mudae/main/medbot.user.js)
 
 
 </div>
@@ -63,7 +63,7 @@ The Discord chat input shows live bot status: rolls left, waiting for Mudae, rol
 
 Once Tampermonkey is installed, click the button below and it will open an install prompt automatically:
 
-[![Install](https://img.shields.io/badge/Install%20MedBot-5865f2?style=for-the-badge&logo=tampermonkey&logoColor=white)](https://raw.githubusercontent.com/MedicV2/MedBot/main/medbot.user.js)
+[![Install](https://img.shields.io/badge/Install%20MedBot-5865f2?style=for-the-badge&logo=tampermonkey&logoColor=white)](https://raw.githubusercontent.com/MedicV2/MedBot-Mudae/main/medbot.user.js)
 
 ---
 
