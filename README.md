@@ -12,6 +12,7 @@
 
 [![Install](https://img.shields.io/badge/Install%20Script-Click%20Here-5865f2?style=for-the-badge&logo=tampermonkey)](https://raw.githubusercontent.com/MedicV2/MedBot/main/medbot.user.js)
 
+
 </div>
 
 ---
@@ -68,6 +69,8 @@ Once Tampermonkey is installed, click the button below and it will open an insta
 
 ## Setup
 
+<img src="https://i.imgur.com/Fpl3Icg.png" align="right" width="210">
+
 After installing, open Discord in your browser and head to a Mudae channel.
 
 1. Press **`Ctrl+M`** or click the **+** in the chat box and select **MedBot** to open the panel
@@ -76,9 +79,13 @@ After installing, open Discord in your browser and head to a Mudae channel.
 
 > Configure needs to be run once per server. The data is saved and reused across sessions.
 
+<br clear="right">
+
 ---
 
 ## Usage
+
+<img src="https://i.imgur.com/e0Nj4Hi.png" align="right" width="230">
 
 Two ways to open MedBot:
 - Click the **+** button in the Discord chat box and select **MedBot** from the menu
@@ -88,13 +95,15 @@ Two ways to open MedBot:
 |---|---|
 | `Ctrl+M` | Open / close the MedBot panel |
 
+<br clear="right">
+
 The panel has five tabs:
 
-- **Send** - pick roll command, set count or toggle infinite mode
-- **Kakera** - enable auto kakera and select which types to collect
-- **Claim** - set up wish/range/series auto claiming
-- **Extra** - run `$oh`, `$oc`, `$oq`, `$ot` with optional multipliers
-- **Settings** - configure server sync and channel lock
+- **Send**:pick roll command, set count or toggle infinite mode
+- **Kakera**:enable auto kakera and select which types to collect
+- **Claim**:set up wish/range/series auto claiming
+- **Extra**:run `$oh`, `$oc`, `$oq`, `$ot` with optional multipliers
+- **Settings**:configure server sync and channel lock
 
 ---
 
@@ -103,4 +112,3 @@ The panel has five tabs:
 MIT. Do whatever you want with it, but keep the copyright notice intact.
 <meta name="google-site-verification" content="Z0y1v2MykduOE2opOu2rVqb_qDbP1jXYk3S0dx02EUs" />
 Copyright (c) 2026 [MedicV2](https://github.com/MedicV2)
-
