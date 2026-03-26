@@ -1383,10 +1383,13 @@
   // Styles
 
   function injectStyles() {
-    if (document.getElementById('medbot-styles')) return;
-    const styleEl = document.createElement('style');
-    styleEl.id = 'medbot-styles';
-    styleEl.textContent = GM_getResourceText('medbot-css');
+    let styleEl = document.getElementById('medbot-styles');
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = 'medbot-styles';
+      styleEl.textContent = GM_getResourceText('medbot-css');
+    }
+    // Always (re-)append so our CSS comes AFTER Discord's dynamically-loaded chunks
     document.head.appendChild(styleEl);
   }
 
