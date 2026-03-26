@@ -8,9 +8,9 @@
 // @grant        GM_setValue
 // @grant        GM_xmlhttpRequest
 // @grant        GM_getResourceText
-// @updateURL    https://raw.githubusercontent.com/MedicV2/MedBot-Mudae/refs/heads/main/medbot.user.js
-// @downloadURL  https://raw.githubusercontent.com/MedicV2/MedBot-Mudae/refs/heads/main/medbot.user.js
-// @resource     medbot-css https://raw.githubusercontent.com/MedicV2/MedBot-Mudae/refs/heads/main/medbot.css
+// @updateURL    https://raw.githubusercontent.com/MedicV2/Medbot-Mudae/refs/heads/main/medbot.user.js
+// @downloadURL  https://raw.githubusercontent.com/MedicV2/Medbot-Mudae/refs/heads/main/medbot.user.js
+// @resource     medbot-css https://raw.githubusercontent.com/MedicV2/Medbot-Mudae/refs/heads/main/medbot.css
 // @connect      media2.giphy.com
 // @connect      cdn.discordapp.com
 // ==/UserScript==
@@ -1383,13 +1383,10 @@
   // Styles
 
   function injectStyles() {
-    let styleEl = document.getElementById('medbot-styles');
-    if (!styleEl) {
-      styleEl = document.createElement('style');
-      styleEl.id = 'medbot-styles';
-      styleEl.textContent = GM_getResourceText('medbot-css');
-    }
-    // Always (re-)append so our CSS comes AFTER Discord's dynamically-loaded chunks
+    if (document.getElementById('medbot-styles')) return;
+    const styleEl = document.createElement('style');
+    styleEl.id = 'medbot-styles';
+    styleEl.textContent = GM_getResourceText('medbot-css');
     document.head.appendChild(styleEl);
   }
 
