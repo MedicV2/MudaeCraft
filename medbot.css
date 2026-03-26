@@ -454,3 +454,28 @@
 .medbot-channel-server { color:var(--mb-accent); }
 .medbot-channel-sep { color:var(--mb-text-faint);font-weight:400; }
 .medbot-channel-name { color:var(--mb-text); }
+
+/* -- Font isolation (prevent Discord "gg sans" override) - this is a must for injecting MedBot into the desktop app whilst also maintaining correct styling.*/
+.medbot-modal,
+.medbot-modal .medbot-title,
+.medbot-modal .medbot-tab,
+.medbot-modal .medbot-toggle-label,
+.medbot-modal .medbot-btn,
+.medbot-modal .medbot-kakera-name,
+.medbot-modal .medbot-channel-breadcrumb-wrap { font-family:var(--mb-font-ui) !important; }
+.medbot-modal .medbot-field-label,
+.medbot-modal .medbot-input,
+.medbot-modal .medbot-user-pill,
+.medbot-modal .medbot-status-badge,
+.medbot-modal .medbot-toggle-sub,
+.medbot-modal .medbot-mini-note,
+.medbot-modal .medbot-tu-badge,
+.medbot-modal .medbot-tu-card-label,
+.medbot-modal .medbot-tu-card-sub,
+.medbot-modal .medbot-tu-rolls-num,
+.medbot-modal .medbot-tu-updated,
+.medbot-modal .medbot-tu-empty,
+.medbot-modal .medbot-mult-display,
+.medbot-modal .medbot-or-divider,
+.medbot-modal .medbot-claim-section-label,
+.medbot-modal .medbot-claim-note { font-family:var(--mb-font-mono) !important; }
