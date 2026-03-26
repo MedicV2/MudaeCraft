@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap');
 
 @property --mb-border-angle {
   syntax: '<angle>';
@@ -34,7 +34,7 @@
   --mb-border:          rgba(255,255,255,.05);
   --mb-border-soft:     rgba(255,255,255,.08);
 
-  --mb-font-ui:         'Syne', system-ui, sans-serif;
+  --mb-font-ui:         'Segoe UI', system-ui, sans-serif;
   --mb-font-mono:       'DM Mono', monospace;
 
   --mb-radius-sm:       10px;
