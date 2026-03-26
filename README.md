@@ -8,9 +8,11 @@
 
 [![Version](https://img.shields.io/badge/version-3.0-5865f2?style=flat-square)](https://github.com/MedicV2/MedBot)
 [![Platform](https://img.shields.io/badge/platform-Tampermonkey-orange?style=flat-square)](https://www.tampermonkey.net/)
+[![Desktop](https://img.shields.io/badge/desktop-Testing-yellow?style=flat-square)](Desktop/MedBot.bat)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 
 [![Install](https://img.shields.io/badge/Install%20Script-Click%20Here-5865f2?style=for-the-badge&logo=tampermonkey)](https://raw.githubusercontent.com/MedicV2/MedBot-Mudae/main/medbot.user.js)
+[![Desktop](https://img.shields.io/badge/Desktop%20Injector-Testing-orange?style=for-the-badge&logo=windows)](Desktop/MedBot.bat)
 
 
 </div>
@@ -104,6 +106,35 @@ The panel has five tabs:
 - **Claim**:set up wish/range/series auto claiming
 - **Extra**:run `$oh`, `$oc`, `$oq`, `$ot` with optional multipliers
 - **Settings**:configure server sync and channel lock
+
+---
+
+## Desktop App (Testing)
+
+> **⚠️ This method is in testing. Use at your own risk — things may break between Discord updates.**
+
+Injects MedBot directly into the Discord desktop app so you don't need a browser or Tampermonkey.
+
+### Requirements
+
+- **Windows 10/11**
+- **[Node.js LTS](https://nodejs.org/)** (the script needs `npx` to pack/unpack Discord's asar)
+
+### How to use
+
+1. Download **[`MedBot.bat`](Desktop/MedBot.bat)** from the `Desktop/` folder (or clone the repo)
+2. Close Discord if it's running
+3. Double-click `MedBot.bat`
+4. Type **`1`** to inject - the script will patch Discord and launch it automatically
+5. To undo, run the bat again and type **`2`** to restore the original files
+
+### What it does
+
+- Extracts Discord's `app.asar`, injects a loader that loads MedBot on startup, then repacks it
+- Creates a backup (`app.asar.medbot.bak`) so you can always restore
+- Settings are saved to a file on disk (`%APPDATA%/discord/medbot/`) instead of localStorage, so they persist across Discord updates
+
+> You'll need to re-inject after Discord auto-updates, since updates replace `app.asar`.
 
 ---
 
