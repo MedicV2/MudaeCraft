@@ -455,27 +455,28 @@
 .medbot-channel-sep { color:var(--mb-text-faint);font-weight:400; }
 .medbot-channel-name { color:var(--mb-text); }
 
-/* -- Font isolation (prevent Discord "gg sans" override) - this is a must for injecting MedBot into the desktop app whilst also maintaining correct styling.*/
-.medbot-modal,
-.medbot-modal .medbot-title,
-.medbot-modal .medbot-tab,
-.medbot-modal .medbot-toggle-label,
-.medbot-modal .medbot-btn,
-.medbot-modal .medbot-kakera-name,
-.medbot-modal .medbot-channel-breadcrumb-wrap { font-family:var(--mb-font-ui) !important; }
-.medbot-modal .medbot-field-label,
-.medbot-modal .medbot-input,
-.medbot-modal .medbot-user-pill,
-.medbot-modal .medbot-status-badge,
-.medbot-modal .medbot-toggle-sub,
-.medbot-modal .medbot-mini-note,
-.medbot-modal .medbot-tu-badge,
-.medbot-modal .medbot-tu-card-label,
-.medbot-modal .medbot-tu-card-sub,
-.medbot-modal .medbot-tu-rolls-num,
-.medbot-modal .medbot-tu-updated,
-.medbot-modal .medbot-tu-empty,
-.medbot-modal .medbot-mult-display,
-.medbot-modal .medbot-or-divider,
-.medbot-modal .medbot-claim-section-label,
-.medbot-modal .medbot-claim-note { font-family:var(--mb-font-mono) !important; }
+/* -- Font isolation (prevent Discord "gg sans" override) -
+   Uses #medbot-backdrop ID for specificity that beats any class-based Discord rule. */
+#medbot-backdrop .medbot-modal,
+#medbot-backdrop .medbot-modal .medbot-title,
+#medbot-backdrop .medbot-modal .medbot-tab,
+#medbot-backdrop .medbot-modal .medbot-toggle-label,
+#medbot-backdrop .medbot-modal .medbot-btn,
+#medbot-backdrop .medbot-modal .medbot-kakera-name,
+#medbot-backdrop .medbot-modal .medbot-channel-breadcrumb-wrap { font-family:var(--mb-font-ui) !important; }
+#medbot-backdrop .medbot-modal .medbot-field-label,
+#medbot-backdrop .medbot-modal .medbot-input,
+#medbot-backdrop .medbot-modal .medbot-user-pill,
+#medbot-backdrop .medbot-modal .medbot-status-badge,
+#medbot-backdrop .medbot-modal .medbot-toggle-sub,
+#medbot-backdrop .medbot-modal .medbot-mini-note,
+#medbot-backdrop .medbot-modal .medbot-tu-badge,
+#medbot-backdrop .medbot-modal .medbot-tu-card-label,
+#medbot-backdrop .medbot-modal .medbot-tu-card-sub,
+#medbot-backdrop .medbot-modal .medbot-tu-rolls-num,
+#medbot-backdrop .medbot-modal .medbot-tu-updated,
+#medbot-backdrop .medbot-modal .medbot-tu-empty,
+#medbot-backdrop .medbot-modal .medbot-mult-display,
+#medbot-backdrop .medbot-modal .medbot-or-divider,
+#medbot-backdrop .medbot-modal .medbot-claim-section-label,
+#medbot-backdrop .medbot-modal .medbot-claim-note { font-family:var(--mb-font-mono) !important; }
