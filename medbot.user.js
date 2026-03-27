@@ -415,12 +415,7 @@
   // Button clicking
 
   function clickBtn(btn) {
-    try {
-      btn.focus();
-      ['pointerdown', 'mousedown', 'pointerup', 'mouseup', 'click'].forEach(eventName =>
-        btn.dispatchEvent(new (eventName.startsWith('pointer') ? PointerEvent : MouseEvent)(eventName, { bubbles: true, cancelable: true }))
-      );
-    } catch { try { btn.click(); } catch {} }
+    try { btn.click(); } catch {console.log('[MedBot] Failed to click button', btn); }
   }
 
   // Kakera
