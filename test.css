@@ -1,0 +1,970 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   MedBot — Stylesheet
+   Styles for the MedBot settings modal, injected into Discord's page.
+   Uses CSS custom properties (design tokens) for consistent theming.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap');
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   1. CSS CUSTOM PROPERTY — Animated Border Angle
+   Registered via @property so it can be animated in a keyframe.
+   Used by the modal's rotating conic-gradient border effect.
+   ───────────────────────────────────────────────────────────────────── */
+
+@property --mb-border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   2. DESIGN TOKENS
+   Centralised colour palette, typography, spacing, and easing values.
+   All MedBot components reference these tokens for consistency.
+   ───────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Background layers */
+  --mb-bg:              #0c0d14;
+  --mb-bg-elevated:     #12131f;
+
+  /* Brand colour channels (used with rgba() for transparency variants) */
+  --mb-purple-rgb:      139, 92, 246;
+  --mb-purple-deep-rgb: 124, 58, 237;
+  --mb-indigo-rgb:      99, 102, 241;
+  --mb-teal-rgb:        45, 212, 191;
+  --mb-green-rgb:       52, 211, 153;
+  --mb-red-rgb:         251, 113, 133;
+
+  /* Solid brand colours */
+  --mb-purple:          #8b5cf6;
+  --mb-indigo:          #6366f1;
+  --mb-accent:          #c4b5fd;     /* Light purple — primary accent for text/badges */
+  --mb-green:           #34d399;
+  --mb-red:             #fb7185;
+
+  /* Text hierarchy (brightest → most subtle) */
+  --mb-text:            #e2e8f0;     /* Primary text */
+  --mb-text-muted:      #94a3b8;     /* Secondary / labels */
+  --mb-text-dim:        #64748b;     /* Tertiary / hints */
+  --mb-text-faint:      #475569;     /* Placeholder / disabled */
+
+  /* Surface & border overlays */
+  --mb-surface:         rgba(255, 255, 255, .025);
+  --mb-surface-hi:      rgba(255, 255, 255, .045);   /* Hovered surface */
+  --mb-border:          rgba(255, 255, 255, .05);
+  --mb-border-soft:     rgba(255, 255, 255, .08);     /* Slightly brighter border */
+
+  /* Typography */
+  --mb-font-ui:         'Segoe UI', system-ui, sans-serif;
+  --mb-font-mono:       'DM Mono', monospace;
+
+  /* Border radii */
+  --mb-radius-sm:       10px;
+  --mb-radius-md:       12px;
+  --mb-radius-lg:       14px;
+  --mb-radius-xl:       22px;
+  --mb-radius-pill:     999px;
+
+  /* Easing curves */
+  --mb-ease-spring:     cubic-bezier(.22, 1, .36, 1);
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   3. BACKDROP (Full-screen overlay behind the modal)
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, .72);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  animation: mb-fade-in .2s ease;
+}
+
+@keyframes mb-fade-in {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   4. MODAL CONTAINER
+   The main dialog box with a rotating conic-gradient border,
+   slide-up entry animation, and layered box shadows.
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-modal {
+  position: relative;
+  width: 480px;
+  max-width: calc(100vw - 24px);
+  background: var(--mb-bg);
+  border: 1px solid transparent;
+  border-radius: var(--mb-radius-xl);
+  box-shadow:
+    0 0 0 1px rgba(var(--mb-purple-rgb), .08),
+    0 8px 32px rgba(0, 0, 0, .5),
+    0 48px 96px rgba(0, 0, 0, .4),
+    0 0 80px -20px rgba(var(--mb-indigo-rgb), .15);
+  padding: 32px 30px 26px;
+  font-family: var(--mb-font-ui);
+  color: var(--mb-text);
+  overflow: visible;
+
+  /* Rotating gradient border — uses background-clip trick:
+     The inner bg (padding-box) is solid, the outer bg (border-box)
+     is a conic-gradient that rotates via --mb-border-angle. */
+  background-image:
+    linear-gradient(var(--mb-bg), var(--mb-bg)),
+    conic-gradient(
+      from var(--mb-border-angle),
+      rgba(var(--mb-purple-deep-rgb), .27),
+      rgba(var(--mb-indigo-rgb), .40),
+      rgba(var(--mb-teal-rgb), .27),
+      rgba(var(--mb-purple-rgb), .27),
+      rgba(var(--mb-purple-deep-rgb), .27)
+    );
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  animation:
+    mb-slide-up .24s var(--mb-ease-spring),
+    mb-border-rotate 6s linear infinite;
+}
+
+@keyframes mb-slide-up {
+  from { opacity: 0; transform: translateY(14px) scale(.98) }
+  to   { opacity: 1; transform: translateY(0)    scale(1)   }
+}
+
+@keyframes mb-border-rotate {
+  to { --mb-border-angle: 360deg; }
+}
+
+/* Top edge highlight — a gradient line across the modal's top */
+.medbot-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--mb-purple-rgb), .6) 30%,
+    rgba(var(--mb-indigo-rgb), .6) 50%,
+    rgba(var(--mb-teal-rgb), .5) 70%,
+    transparent
+  );
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   5. HEADER GIF (Floats above the modal)
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-gif-wrap {
+  position: absolute;
+  top: -125px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 125px;
+  height: 125px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.medbot-gif {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter:
+    drop-shadow(0 8px 28px rgba(var(--mb-purple-rgb), .4))
+    drop-shadow(0 2px 8px rgba(var(--mb-indigo-rgb), .3));
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   6. HEADER (Title + user pill + status badge)
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.medbot-title {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -.5px;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, #f8fafc 20%, var(--mb-accent) 60%, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Pill showing the current Discord username */
+.medbot-user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(var(--mb-purple-rgb), .08);
+  border: 1px solid rgba(var(--mb-purple-rgb), .18);
+  border-radius: var(--mb-radius-pill);
+  padding: 3px 12px 3px 8px;
+  font-family: var(--mb-font-mono);
+  font-size: 11.5px;
+  color: var(--mb-accent);
+}
+
+.medbot-user-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #6ee7b7;
+  box-shadow: 0 0 8px #6ee7b7;
+  flex-shrink: 0;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   7. STATUS BADGE (Idle / Running indicator)
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--mb-radius-pill);
+  font-family: var(--mb-font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.medbot-status-badge.idle {
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgba(255, 255, 255, .08);
+  color: var(--mb-text-muted);
+}
+
+.medbot-status-badge.running {
+  background: rgba(var(--mb-green-rgb), .06);
+  border: 1px solid rgba(var(--mb-green-rgb), .22);
+  color: var(--mb-green);
+  box-shadow: 0 0 20px -4px rgba(var(--mb-green-rgb), .2);
+}
+
+.medbot-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.medbot-status-badge.running .medbot-status-dot {
+  animation: mb-dot-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes mb-dot-pulse {
+  0%, 100% { opacity: 1;   transform: scale(1)   }
+  50%      { opacity: .35; transform: scale(.65) }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   8. DIVIDER
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-divider {
+  height: 1px;
+  background: var(--mb-border);
+  margin-bottom: 22px;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   9. TAB BAR (Send / Kakera / Claim / Extra / Settings)
+   Includes a sliding indicator that animates between active tabs.
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-tabs {
+  position: relative;
+  display: flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, .035);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--mb-radius-lg);
+  padding: 3px;
+  margin-bottom: 22px;
+}
+
+/* Sliding highlight behind the active tab (positioned via JS) */
+.medbot-tab-indicator {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, rgba(var(--mb-purple-rgb), .18), rgba(var(--mb-indigo-rgb), .14));
+  border: 1px solid rgba(var(--mb-purple-rgb), .18);
+  box-shadow: 0 0 12px -2px rgba(var(--mb-purple-rgb), .15);
+  transition:
+    left .32s var(--mb-ease-spring),
+    width .32s var(--mb-ease-spring);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.medbot-tab {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--mb-text-dim);
+  padding: 8px 0;
+  cursor: pointer;
+  font-family: var(--mb-font-ui);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  transition: color .2s;
+  border-radius: 11px;
+}
+
+.medbot-tab:hover:not(.active) { color: var(--mb-text-muted); }
+.medbot-tab.active             { color: var(--mb-accent); }
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   10. TAB PANELS (Content areas that show/hide per active tab)
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-panel         { display: none; }
+.medbot-panel.active  { display: block; animation: mb-panel-enter .2s ease; }
+
+@keyframes mb-panel-enter {
+  from { opacity: 0; transform: translateY(4px) }
+  to   { opacity: 1; transform: translateY(0)   }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   11. FORM FIELDS (Labels + text inputs + dropdowns)
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-field { margin-bottom: 16px; }
+
+.medbot-field-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--mb-text-muted);
+  margin-bottom: 7px;
+  font-family: var(--mb-font-mono);
+}
+
+.medbot-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 14px;
+  border-radius: var(--mb-radius-md);
+  border: 1px solid rgba(255, 255, 255, .07);
+  outline: none;
+  background: rgba(255, 255, 255, .03);
+  color: #f1f5f9;
+  font-size: 14px;
+  font-family: var(--mb-font-mono);
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+
+/* Custom dropdown arrow (replaces native select appearance) */
+.medbot-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2394a3b8' d='M1.4 0L6 4.6 10.6 0 12 1.4l-6 6-6-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.medbot-select option  { background: var(--mb-bg); color: #f1f5f9; }
+.medbot-input::placeholder { color: var(--mb-text-faint); }
+
+.medbot-input:focus {
+  border-color: rgba(var(--mb-purple-rgb), .4);
+  box-shadow: 0 0 0 3px rgba(var(--mb-purple-rgb), .1);
+  background: rgba(var(--mb-purple-rgb), .04);
+}
+
+.medbot-input:disabled { opacity: .35; cursor: not-allowed; }
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   12. TOGGLE ROWS (Label + description + switch)
+   Used for auto-kakera, auto-claim, infinite mode, etc.
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--mb-surface);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--mb-radius-lg);
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s, border-color .15s;
+  margin-bottom: 14px;
+}
+
+.medbot-toggle-row:hover  { background: var(--mb-surface-hi); border-color: var(--mb-border-soft); }
+.medbot-toggle-label      { font-size: 13.5px; font-weight: 600; color: var(--mb-text); }
+.medbot-toggle-sub        { font-size: 12px; color: var(--mb-text-muted); font-family: var(--mb-font-mono); margin-top: 3px; }
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   13. TOGGLE SWITCH (iOS-style sliding toggle)
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-switch       { position: relative; width: 38px; height: 22px; flex-shrink: 0; }
+.medbot-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+
+.medbot-switch-track {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, .1);
+  border-radius: var(--mb-radius-pill);
+  transition: background .25s, border-color .25s, box-shadow .25s;
+  border: 1px solid rgba(255, 255, 255, .08);
+}
+
+.medbot-switch input:checked ~ .medbot-switch-track {
+  background: linear-gradient(135deg, rgba(var(--mb-indigo-rgb), .5), rgba(var(--mb-purple-rgb), .5));
+  border-color: rgba(var(--mb-purple-rgb), .5);
+  box-shadow: 0 0 12px -2px rgba(var(--mb-purple-rgb), .35);
+}
+
+.medbot-switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform .25s var(--mb-ease-spring);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .4);
+}
+
+.medbot-switch input:checked ~ .medbot-switch-thumb { transform: translateX(16px); }
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   14. KAKERA SELECTION LIST (Scrollable checkbox list)
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-kakera-scroll {
+  max-height: 240px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 4px;
+  margin-top: 4px;
+}
+
+.medbot-kakera-scroll::-webkit-scrollbar       { width: 3px; }
+.medbot-kakera-scroll::-webkit-scrollbar-thumb  { background: rgba(255, 255, 255, .12); border-radius: 99px; }
+
+.medbot-kakera-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  background: rgba(255, 255, 255, .02);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--mb-radius-sm);
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s, border-color .15s, box-shadow .15s;
+}
+
+.medbot-kakera-row:hover    { background: rgba(255, 255, 255, .05); border-color: var(--mb-border-soft); }
+.medbot-kakera-row.selected {
+  background: rgba(var(--mb-purple-rgb), .07);
+  border-color: rgba(var(--mb-purple-rgb), .22);
+  box-shadow: 0 0 12px -4px rgba(var(--mb-purple-rgb), .15);
+}
+
+.medbot-kakera-row input { display: none; }
+.medbot-kakera-row img   { width: 22px; height: 22px; object-fit: contain; }
+.medbot-kakera-name      { flex: 1; font-size: 13px; font-weight: 600; color: var(--mb-text-muted); }
+.medbot-kakera-row.selected .medbot-kakera-name { color: var(--mb-accent); }
+
+/* Checkbox indicator (checkmark icon) */
+.medbot-kakera-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, .12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .15s, border-color .15s;
+}
+
+.medbot-kakera-row.selected .medbot-kakera-check {
+  background: linear-gradient(135deg, var(--mb-indigo), var(--mb-purple));
+  border-color: transparent;
+}
+
+.medbot-kakera-check svg                          { display: none; }
+.medbot-kakera-row.selected .medbot-kakera-check svg { display: block; }
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   15. INFO NOTE BOXES
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-mini-note {
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--mb-text-muted);
+  line-height: 1.6;
+  font-family: var(--mb-font-mono);
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, .02);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--mb-radius-sm);
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   16. FOOTER ACTION BAR
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--mb-border);
+}
+
+.medbot-actions-left { margin-right: auto; }
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   17. BUTTONS (Ghost / Secondary / Primary / Danger)
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-btn {
+  border: none;
+  border-radius: var(--mb-radius-md);
+  padding: 10px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--mb-font-ui);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.medbot-btn:active { transform: scale(.96); }
+
+/* Ghost — transparent with subtle border */
+.medbot-btn-ghost       { background: transparent; color: var(--mb-text-dim); border: 1px solid rgba(255, 255, 255, .07); }
+.medbot-btn-ghost:hover { background: rgba(255, 255, 255, .04); color: var(--mb-text-muted); border-color: rgba(255, 255, 255, .12); }
+
+/* Secondary — subtle fill */
+.medbot-btn-secondary       { background: rgba(255, 255, 255, .05); color: var(--mb-text-muted); border: 1px solid var(--mb-border-soft); }
+.medbot-btn-secondary:hover { background: rgba(255, 255, 255, .08); color: #cbd5e1; }
+
+/* Primary — gradient fill with glow */
+.medbot-btn-primary {
+  background: linear-gradient(135deg, var(--mb-indigo), var(--mb-purple));
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(var(--mb-indigo-rgb), .3), 0 0 0 1px rgba(var(--mb-purple-rgb), .15);
+}
+.medbot-btn-primary:hover {
+  box-shadow: 0 4px 28px rgba(var(--mb-indigo-rgb), .45), 0 0 0 1px rgba(var(--mb-purple-rgb), .25);
+  opacity: .93;
+}
+
+/* Danger — red tint for destructive actions (Stop button) */
+.medbot-btn-danger       { background: rgba(var(--mb-red-rgb), .08); color: var(--mb-red); border: 1px solid rgba(var(--mb-red-rgb), .2); }
+.medbot-btn-danger:hover { background: rgba(var(--mb-red-rgb), .15); box-shadow: 0 0 16px -4px rgba(var(--mb-red-rgb), .2); }
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   18. ATTACHMENT MENU ITEM (Injected into Discord's "+" popup)
+   ───────────────────────────────────────────────────────────────────── */
+
+/* Unused legacy badge (kept for backwards compatibility) */
+.medbot-menu-badge {
+  margin-left: auto;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: var(--mb-radius-pill);
+  background: rgba(var(--mb-purple-rgb), .12);
+  color: var(--mb-accent);
+  font-weight: 700;
+  font-family: var(--mb-font-mono);
+  letter-spacing: .04em;
+  border: 1px solid rgba(var(--mb-purple-rgb), .2);
+}
+
+/* Gradient separator above the injected menu item */
+[data-medbot-injected]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 6px;
+  right: 6px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(var(--mb-purple-rgb), .5) 30%, rgba(var(--mb-indigo-rgb), .5) 70%, transparent);
+  pointer-events: none;
+}
+
+/* Status pill (AUTO / LIVE) shown on the menu item */
+.medbot-menu-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  font-family: var(--mb-font-mono);
+  padding: 2px 8px 2px 7px;
+  border-radius: var(--mb-radius-pill);
+  background: rgba(var(--mb-purple-rgb), .1);
+  border: 1px solid rgba(var(--mb-purple-rgb), .22);
+  color: var(--mb-accent);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.medbot-menu-status.running {
+  background: rgba(var(--mb-green-rgb), .08);
+  border-color: rgba(var(--mb-green-rgb), .25);
+  color: var(--mb-green);
+}
+
+.medbot-menu-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+  animation: mb-dot-pulse 1.4s ease-in-out infinite;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   19. MINIGAME MULTIPLIER CONTROLS ($oh/$oc/$oq/$ot)
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-multiplier-control { display: flex; align-items: center; gap: 4px; }
+
+.medbot-mult-btn {
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid var(--mb-border-soft);
+  color: var(--mb-text-muted);
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .15s;
+  padding: 0;
+  line-height: 1;
+  font-family: var(--mb-font-ui);
+}
+
+.medbot-mult-btn:hover:not(:disabled) {
+  background: rgba(var(--mb-purple-rgb), .12);
+  color: var(--mb-accent);
+  border-color: rgba(var(--mb-purple-rgb), .25);
+}
+
+.medbot-mult-btn:disabled { opacity: .3; cursor: not-allowed; }
+
+.medbot-mult-display {
+  font-family: var(--mb-font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mb-text);
+  min-width: 30px;
+  text-align: center;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   20. "AND/OR" DIVIDER (Between claim criteria sections)
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-or-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+  font-family: var(--mb-font-mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  color: var(--mb-text-dim);
+  text-transform: uppercase;
+}
+
+.medbot-or-divider::before,
+.medbot-or-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, .06);
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   21. CLAIM TAB — Section cards & note
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-claim-section {
+  background: var(--mb-surface);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--mb-radius-lg);
+  padding: 14px 16px;
+}
+
+.medbot-claim-section-label {
+  font-family: var(--mb-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--mb-text-muted);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.medbot-claim-note {
+  font-family: var(--mb-font-mono);
+  font-size: 12px;
+  color: var(--mb-text-dim);
+  margin-top: 16px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   22. $tu STATUS CARDS (Claim / Rolls / $rt)
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-tu-status { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+
+/* Available / Unavailable badges */
+.medbot-tu-badge {
+  display: inline-flex;
+  padding: 3px 10px;
+  border-radius: var(--mb-radius-pill);
+  font-family: var(--mb-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.medbot-tu-badge.available {
+  background: rgba(var(--mb-green-rgb), .08);
+  border: 1px solid rgba(var(--mb-green-rgb), .22);
+  color: var(--mb-green);
+  box-shadow: 0 0 10px -3px rgba(var(--mb-green-rgb), .2);
+}
+
+.medbot-tu-badge.unavailable {
+  background: rgba(var(--mb-red-rgb), .06);
+  border: 1px solid rgba(var(--mb-red-rgb), .18);
+  color: var(--mb-red);
+}
+
+.medbot-tu-updated { font-family: var(--mb-font-mono); font-size: 11px; color: var(--mb-text-dim); text-align: right; padding: 2px 2px 0; }
+
+.medbot-tu-empty {
+  font-family: var(--mb-font-mono);
+  font-size: 12.5px;
+  color: var(--mb-text-muted);
+  text-align: center;
+  padding: 24px;
+  background: rgba(255, 255, 255, .02);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--mb-radius-lg);
+}
+
+/* Card grid layout */
+.medbot-tu-grid        { display: grid; gap: 8px; margin-bottom: 10px; }
+.medbot-tu-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.medbot-tu-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+.medbot-tu-card {
+  background: var(--mb-surface);
+  border: 1px solid var(--mb-border);
+  border-radius: var(--mb-radius-lg);
+  padding: 16px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.medbot-tu-card:hover {
+  border-color: var(--mb-border-soft);
+  box-shadow: 0 0 16px -4px rgba(var(--mb-purple-rgb), .1);
+}
+
+.medbot-tu-card-label {
+  font-family: var(--mb-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--mb-text-muted);
+}
+
+.medbot-tu-card-main { display: flex; align-items: center; justify-content: center; }
+.medbot-tu-card-sub  { font-family: var(--mb-font-mono); font-size: 11px; color: var(--mb-text-muted); line-height: 1.4; min-height: 14px; }
+
+/* Roll count (large number) */
+.medbot-tu-rolls-num {
+  font-family: var(--mb-font-mono);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--mb-accent);
+  line-height: 1;
+}
+
+/* Roll progress bar */
+.medbot-tu-progress      { width: 100%; height: 3px; background: rgba(255, 255, 255, .06); border-radius: 99px; overflow: hidden; }
+.medbot-tu-progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--mb-indigo), #a78bfa); transition: width .5s ease; }
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   23. CHANNEL LOCK (Settings tab — server/channel breadcrumb + toggle)
+   ───────────────────────────────────────────────────────────────────── */
+
+.medbot-channel-rows { position: relative; margin-bottom: 14px; }
+
+/* Tooltip that appears on hover explaining what channel lock does */
+.medbot-channel-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  width: 240px;
+  background: var(--mb-bg-elevated);
+  border: 1px solid rgba(var(--mb-purple-rgb), .25);
+  border-radius: var(--mb-radius-lg);
+  padding: 12px 16px;
+  font-family: var(--mb-font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--mb-text-muted);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+  z-index: 100;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .6);
+}
+
+.medbot-channel-rows:hover .medbot-channel-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Tooltip arrow */
+.medbot-channel-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--mb-bg-elevated);
+}
+
+.medbot-lock-row { margin-bottom: 0; cursor: pointer; }
+
+.medbot-channel-breadcrumb-wrap {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.medbot-channel-server { color: var(--mb-accent); }
+.medbot-channel-sep    { color: var(--mb-text-faint); font-weight: 400; }
+.medbot-channel-name   { color: var(--mb-text); }
+
+
+/* UI font (headings, labels, buttons) */
+#medbot-backdrop .medbot-modal,
+#medbot-backdrop .medbot-modal .medbot-title,
+#medbot-backdrop .medbot-modal .medbot-tab,
+#medbot-backdrop .medbot-modal .medbot-toggle-label,
+#medbot-backdrop .medbot-modal .medbot-btn,
+#medbot-backdrop .medbot-modal .medbot-kakera-name,
+#medbot-backdrop .medbot-modal .medbot-channel-breadcrumb-wrap {
+  font-family: var(--mb-font-ui) !important;
+}
+
+/* Mono font (data, values, descriptions) */
+#medbot-backdrop .medbot-modal .medbot-field-label,
+#medbot-backdrop .medbot-modal .medbot-input,
+#medbot-backdrop .medbot-modal .medbot-user-pill,
+#medbot-backdrop .medbot-modal .medbot-status-badge,
+#medbot-backdrop .medbot-modal .medbot-toggle-sub,
+#medbot-backdrop .medbot-modal .medbot-mini-note,
+#medbot-backdrop .medbot-modal .medbot-tu-badge,
+#medbot-backdrop .medbot-modal .medbot-tu-card-label,
+#medbot-backdrop .medbot-modal .medbot-tu-card-sub,
+#medbot-backdrop .medbot-modal .medbot-tu-rolls-num,
+#medbot-backdrop .medbot-modal .medbot-tu-updated,
+#medbot-backdrop .medbot-modal .medbot-tu-empty,
+#medbot-backdrop .medbot-modal .medbot-mult-display,
+#medbot-backdrop .medbot-modal .medbot-or-divider,
+#medbot-backdrop .medbot-modal .medbot-claim-section-label,
+#medbot-backdrop .medbot-modal .medbot-claim-note {
+  font-family: var(--mb-font-mono) !important;
+}
